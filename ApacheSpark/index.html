@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitectura Spark - Tech Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-purple: #9d4edd;
+            --dark-bg: #0a0118;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --neon-border: rgba(157, 78, 221, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            background-image:
+                radial-gradient(circle at 80% 30%, rgba(157, 78, 221, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 20% 70%, rgba(60, 9, 108, 0.2) 0%, transparent 40%);
+            color: #e0e1dd;
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Contenedor Principal con Sidebar a la Derecha */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Sidebar Derecha */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: #fff;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateX(50px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary-purple);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(-10px);
+            background: rgba(157, 78, 221, 0.15);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+        }
+
+        .nav-btn.active {
+            background: rgba(157, 78, 221, 0.25);
+            border-color: #c77dff;
+            transform: translateX(-15px);
+        }
+
+        .nav-btn.active::after {
+            transform: scaleY(1);
+        }
+
+        /* Animaciones de botones */
+        .sidebar .nav-btn:nth-child(1) {
+            animation: slideInRight 0.5s forwards 0.1s;
+        }
+
+        .sidebar .nav-btn:nth-child(2) {
+            animation: slideInRight 0.5s forwards 0.2s;
+        }
+
+        .sidebar .nav-btn:nth-child(3) {
+            animation: slideInRight 0.5s forwards 0.3s;
+        }
+
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Área de Contenido */
+        .content-area {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 60px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .content-card {
+            display: none;
+            width: 100%;
+            animation: fadeInBlur 0.6s ease-out forwards;
+        }
+
+        .content-card.active {
+            display: block;
+        }
+
+        @keyframes fadeInBlur {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .tech-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #5a189a;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff, #c77dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        p,
+        li {
+            line-height: 1.6;
+            font-size: 1.05rem;
+            color: #b0a6c0;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        li {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--primary-purple);
+            font-weight: bold;
+        }
+
+        code {
+            background: rgba(157, 78, 221, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #efd3ff;
+        }
+
+        .bg-ornament {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border: 2px solid var(--primary-purple);
+            border-radius: 50%;
+            opacity: 0.05;
+            bottom: -50px;
+            left: -50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <main class="content-area">
+            <div class="bg-ornament"></div>
+
+            <div id="card-0" class="content-card active">
+                <span class="tech-tag">Core Process</span>
+                <h2>Driver Program (Programa Controlador)</h2>
+                <p>Es el corazón de la aplicación Spark. Es el proceso donde se ejecuta la función <code>main()</code>
+                    del usuario. El Driver es responsable de:</p>
+                <ul>
+                    <li>Crear el SparkContext (o SparkSession), que es el punto de entrada a toda la funcionalidad de
+                        Spark.</li>
+                    <li>Analizar el código del usuario, transformarlo en un plan de ejecución lógico y físico (un Grafo
+                        Acíclico Dirigido o DAG de tareas).</li>
+                    <li>Comunicarse con el Clúster Manager para solicitar recursos (CPU y memoria) para los ejecutores.
+                    </li>
+                    <li>Coordinar y planificar la ejecución de las tareas en los ejecutores.</li>
+                </ul>
+            </div>
+
+            <div id="card-1" class="content-card">
+                <span class="tech-tag">Resource Management</span>
+                <h2>Clúster Manager (Gestor de Clúster)</h2>
+                <p>Es un servicio externo responsable de la asignación de recursos en el clúster. Spark es agnóstico al
+                    gestor de clúster y puede ejecutarse sobre varios de ellos:</p>
+                <ul>
+                    <li><strong>Standalone:</strong> un gestor de clúster simple que viene incluido con Spark.</li>
+                    <li><strong>Apache Mesos:</strong> un gestor de clúster de propósito general.</li>
+                    <li><strong>Hadoop YARN:</strong> el gestor de recursos de Hadoop, una opción muy común en entornos
+                        empresariales.</li>
+                    <li><strong>Kubernetes:</strong> un sistema de orquestación de contenedores.</li>
+                </ul>
+            </div>
+
+            <div id="card-2" class="content-card">
+                <span class="tech-tag">Worker Nodes</span>
+                <h2>Executors (Ejecutores)</h2>
+                <p>Son procesos de trabajo que se ejecutan en los nodos trabajadores (worker nodes) del clúster. Cada
+                    aplicación Spark tiene su propio conjunto de ejecutores. Los ejecutores son responsables de:</p>
+                <ul>
+                    <li>Ejecutar las tareas individuales que les asigna el Driver.</li>
+                    <li>Almacenar las particiones de datos en memoria (caching) o en disco.</li>
+                    <li>Devolver los resultados de las tareas al Driver.</li>
+                </ul>
+            </div>
+        </main>
+
+        <aside class="sidebar">
+            <button class="nav-btn active" onclick="showTab(0)">Driver Program</button>
+            <button class="nav-btn" onclick="showTab(1)">Cluster Manager</button>
+            <button class="nav-btn" onclick="showTab(2)">Executors</button>
+        </aside>
+    </div>
+
+    <script>
+        function showTab(index) {
+            // Actualizar botones
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons[index].classList.add('active');
+
+            // Actualizar contenido
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            // Reiniciar animación
+            setTimeout(() => {
+                cards[index].classList.add('active');
+            }, 10);
+        }
+    </script>
+</body>
+
+</html>
