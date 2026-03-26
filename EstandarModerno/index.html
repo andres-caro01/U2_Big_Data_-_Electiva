@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spark Cyberpunk - Code Edition</title>
+    <title>Spark Cyberpunk - Floating Nav</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -15,7 +16,8 @@
             --code-bg: #13022b;
         }
 
-        body, html {
+        body,
+        html {
             margin: 0;
             padding: 0;
             width: 100%;
@@ -33,16 +35,48 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
+            background-image:
                 linear-gradient(to right, rgba(72, 60, 154, 0.1) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(72, 60, 154, 0.1) 1px, transparent 1px);
             background-size: 40px 40px;
             z-index: -1;
         }
 
+        /* INSTRUCCIÓN FLOTANTE - SUPERIOR DERECHA */
+        .nav-instruction {
+            position: fixed;
+            top: 30px;
+            right: 40px;
+            font-size: 0.75rem;
+            color: var(--neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            z-index: 1000;
+            padding: 10px 20px;
+            background: rgba(72, 60, 154, 0.2);
+            border: 1px solid var(--neon-cyan);
+            border-left: 5px solid var(--neon-cyan);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+                box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+            }
+        }
+
         .slider {
             display: flex;
-            width: 400vw; /* Cuatro slides ahora */
+            width: 400vw;
             height: 100vh;
             transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
         }
@@ -67,7 +101,6 @@
             border-left: 8px solid var(--primary-purple);
             padding-left: 20px;
             text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
-            letter-spacing: 3px;
         }
 
         .content {
@@ -77,7 +110,6 @@
             color: var(--text-gray);
             background: rgba(72, 60, 154, 0.1);
             padding: 25px;
-            border-radius: 0 20px 0 20px;
             border: 1px solid var(--primary-purple);
             backdrop-filter: blur(5px);
             box-shadow: -8px 8px 0px var(--primary-purple);
@@ -90,8 +122,6 @@
             position: relative;
             background: var(--code-bg);
             border: 1px solid var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-            border-radius: 5px;
             padding: 20px;
             margin-top: 10px;
         }
@@ -100,10 +130,8 @@
             margin: 0;
             overflow-x: auto;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #a9b7c6;
-            scrollbar-width: thin;
-            scrollbar-color: var(--primary-purple) transparent;
         }
 
         .copy-btn {
@@ -117,20 +145,9 @@
             font-size: 0.7rem;
             cursor: pointer;
             text-transform: uppercase;
-            transition: all 0.3s;
         }
 
-        .copy-btn:hover {
-            background: var(--neon-cyan);
-            color: black;
-        }
-
-        .copy-btn.copied {
-            border-color: var(--neon-magenta);
-            color: var(--neon-magenta);
-        }
-
-        /* Navegación */
+        /* Botones de Navegación */
         .nav-buttons {
             position: fixed;
             bottom: 30px;
@@ -151,7 +168,8 @@
             transition: 0.3s;
         }
 
-        button.nav-dot:hover, button.nav-dot.active {
+        button.nav-dot:hover,
+        button.nav-dot.active {
             background: var(--primary-purple);
             box-shadow: 0 0 15px var(--primary-purple);
         }
@@ -167,8 +185,13 @@
         }
 
         @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
+            0% {
+                top: 0%;
+            }
+
+            100% {
+                top: 100%;
+            }
         }
 
         code.inline-code {
@@ -179,30 +202,46 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="grid-bg"></div>
     <div class="scanline"></div>
 
+    <div class="nav-instruction">
+        Haga clic sobre los botones inferiores para navegar
+    </div>
+
     <div class="slider" id="slider">
         <section class="slide">
             <h1>DataFrame</h1>
             <div class="content">
-                Es una colección distribuida de datos organizada en columnas con nombre, similar a una tabla en una base de datos relacional o un DataFrame en pandas (Python) o R. Los DataFrames se pueden construir a partir de una amplia variedad de fuentes, como archivos estructurados (JSON, CSV, Parquet), tablas de Hive o bases de datos externas. Ofrecen un rico conjunto de operaciones (transformaciones y acciones) y pueden ser manipulados usando expresiones de columna o consultas SQL.
+                Es una colección distribuida de datos organizada en columnas con nombre, similar a una tabla en una base
+                de datos relacional o un DataFrame en pandas (Python) o R. Los DataFrames se pueden construir a partir
+                de una amplia variedad de fuentes, como archivos estructurados (JSON, CSV, Parquet), tablas de Hive o
+                bases de datos externas. Ofrecen un rico conjunto de operaciones (transformaciones y acciones) y pueden
+                ser manipulados usando expresiones de columna o consultas SQL.
             </div>
         </section>
 
         <section class="slide">
             <h1>Dataset</h1>
             <div class="content">
-                Es una extensión de la API de DataFrame que proporciona una interfaz orientada a objetos y con seguridad de tipos (type-safe). Esencialmente, es una colección distribuida de objetos JVM (en Scala y Java). Un DataFrame es, de hecho, un Dataset, donde <code class="inline-code">Row</code> es un objeto genérico y no tipado. Los Datasets combinan la seguridad de tipos de los RDDs con las optimizaciones de rendimiento de los DataFrames.
+                Es una extensión de la API de DataFrame que proporciona una interfaz orientada a objetos y con seguridad
+                de tipos (type-safe). Esencialmente, es una colección distribuida de objetos JVM (en Scala y Java). Un
+                DataFrame es, de hecho, un Dataset, donde <code class="inline-code">Row</code> es un objeto genérico y
+                no tipado. Los Datasets combinan la seguridad de tipos de los RDDs con las optimizaciones de rendimiento
+                de los DataFrames.
             </div>
         </section>
 
         <section class="slide">
             <h1>Carga y Manipulación</h1>
             <div class="content">
-                La forma más común de interactuar con Spark es a través de la <code class="inline-code">SparkSession</code>, que es el punto de entrada para las APIs estructuradas. A continuación, se muestra un ejemplo simple en PySpark (la API de Python para Spark) de cómo cargar un archivo CSV y realizar algunas transformaciones básicas:
+                La forma más común de interactuar con Spark es a través de la <code
+                    class="inline-code">SparkSession</code>, que es el punto de entrada para las APIs estructuradas. A
+                continuación, se muestra un ejemplo simple en PySpark (la API de Python para Spark) de cómo cargar un
+                archivo CSV y realizar algunas transformaciones básicas:
             </div>
         </section>
 
@@ -262,8 +301,6 @@ spark.stop()</pre>
         function move(index, btn) {
             const slider = document.getElementById('slider');
             slider.style.transform = `translateX(-${index * 100}vw)`;
-            
-            // Actualizar estado de botones
             document.querySelectorAll('.nav-dot').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
@@ -273,16 +310,12 @@ spark.stop()</pre>
             try {
                 await navigator.clipboard.writeText(code);
                 button.innerText = "¡Copiado!";
-                button.classList.add('copied');
-                
-                setTimeout(() => {
-                    button.innerText = "Copiar";
-                    button.classList.remove('copied');
-                }, 2000);
+                setTimeout(() => button.innerText = "Copiar", 2000);
             } catch (err) {
                 console.error('Error al copiar: ', err);
             }
         }
     </script>
 </body>
+
 </html>
