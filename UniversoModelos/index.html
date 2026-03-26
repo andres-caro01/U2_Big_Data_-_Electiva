@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoSQL 3D - Edición Morada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            /* NUEVA PALETA MORADA */
+            --primary-purple: #A855F7; /* Púrpura eléctrico (Acento) */
+            --dark-purple: #6B21A8;    /* Violeta oscuro (Hover) */
+            --glass: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #020617; /* Mantenemos fondo oscuro profundo */
+            color: #f1f5f9;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Fondo Animado con tonos morados */
+        .bg-glow {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(130px);
+            opacity: 0.12; /* Sutil */
+            animation: float 18s infinite alternate ease-in-out;
+        }
+
+        @keyframes float {
+            from { transform: translate(0, 0); }
+            to { transform: translate(6%, 6%); }
+        }
+
+        /* Instrucción Flotante Morada */
+        .instruction-tag {
+            position: fixed;
+            top: 40px;
+            background: rgba(168, 85, 247, 0.12); /* Tono púrpura sutil */
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--primary-purple);
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #fff;
+            z-index: 100;
+        }
+
+        .swiper {
+            width: 100%;
+            max-width: 1200px;
+            padding: 60px 0;
+        }
+
+        .swiper-slide {
+            width: 500px;
+            min-height: 550px;
+            background: var(--glass);
+            backdrop-filter: blur(35px);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        /* Borde activo en morado */
+        .swiper-slide-active {
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.1);
+        }
+
+        /* Animaciones de Texto intactas */
+        .reveal { opacity: 0; transform: translateY(15px); transition: 0.5s ease-out; }
+        .swiper-slide-active .reveal { opacity: 1; transform: translateY(0); }
+        .delay-1 { transition-delay: 0.2s; }
+        .delay-2 { transition-delay: 0.4s; }
+
+        /* Botones de Navegación Estilo Apple Morados */
+        .nav-btn {
+            width: 55px;
+            height: 55px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        /* Estado deshabilitado intacto */
+        .swiper-button-disabled {
+            opacity: 0.1;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        /* Hover en morado */
+        .nav-btn:hover:not(.swiper-button-disabled) {
+            background: var(--dark-purple);
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.5);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .btn-prev { left: 30px; }
+        .btn-next { right: 30px; }
+
+        /* Títulos e Información intactos */
+        h2 { font-weight: 600; font-size: 1.6rem; margin-bottom: 22px; color: #fff; line-height: 1.3; }
+        .desc { font-size: 0.95rem; line-height: 1.85; color: #a1a1aa; flex-grow: 1; }
+        
+        /* Ejemplo con acento morado */
+        .example { margin-top: 25px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 0.9rem; color: #d8b4fe; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow">
+        <div class="shape" style="width: 550px; height: 550px; background: #7C3AED; top: -8%; left: -6%;"></div>
+        <div class="shape" style="width: 450px; height: 450px; background: #A855F7; bottom: -8%; right: -6%;"></div>
+    </div>
+
+    <div class="instruction-tag">
+        Haga clic en los botones izquierdo y derecho para navegar
+    </div>
+
+    <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <h2 class="reveal">1.1.1 Bases de Datos Documentales (Document Stores)</h2>
+                <div class="desc reveal delay-1">
+                    Almacenan y consultan datos en forma de documentos, típicamente en formatos como JSON o BSON. Cada documento es una estructura de datos autocontenida y jerárquica que puede anidar otros documentos o listas. Este modelo se asemeja mucho a los objetos que los desarrolladores utilizan en el código de la aplicación, lo que reduce la "impedancia de desajuste objeto-relacional" (Saladage & Fowler, 2012). Son de propósito general y extremadamente flexibles, ya que cada documento puede tener su propia estructura.
+                </div>
+                <div class="example reveal delay-2">
+                    <strong>o Ejemplo líder:</strong> MongoDB (Erickson, 2024).
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <h2 class="reveal">1.1.2 Bases de Datos Clave-Valor (Key-Value Stores)</h2>
+                <div class="desc reveal delay-1">
+                    Son el tipo más simple de base de datos NoSQL. Almacenan datos como un diccionario o un mapa hash, donde cada dato (el "valor") está asociado a una única "clave". Los valores pueden ser desde una simple cadena de texto hasta un objeto complejo. Son increíblemente rápidas y escalables para operaciones de lectura y escritura simples, pero ofrecen capacidades de consulta limitadas, ya que generalmente solo se puede buscar por clave.
+                </div>
+                <div class="example reveal delay-2">
+                    <strong>o Ejemplos:</strong> Redis (Amazon Web Services, s.f.), Amazon DynamoDB (Amazon Web Services).
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <h2 class="reveal">1.1.3 Bases de Datos Columnares (Column-Family Stores)</h2>
+                <div class="desc reveal delay-1">
+                    A primera vista, pueden parecerse a las tablas relacionales, ya que tienen filas y columnas. Sin embargo, la diferencia fundamental es que los datos se almacenan por columnas en lugar de por filas. Esto las hace extremadamente eficientes para consultas analíticas que necesitan agregar valores sobre un gran número de filas, pero solo para un pequeño subconjunto de columnas.
+                </div>
+                <div class="example reveal delay-2">
+                    <strong>o Ejemplo líder:</strong> Apache Cassandra (Apache Software Foundation, 2026).
+                </div>
+            </div>
+
+            <div class="swiper-slide">
+                <h2 class="reveal">1.1.4 Bases de Datos de Grafos (Graph Databases)</h2>
+                <div class="desc reveal delay-1">
+                    Están diseñadas específicamente para almacenar y navegar relaciones. El modelo de datos se compone de nodos (entidades) y aristas (relaciones que conectan los nodos). Tanto los nodos como las aristas pueden tener propiedades (atributos). Son la opción ideal para problemas donde las conexiones entre los datos son tan importantes como los datos mismos, como en redes sociales, sistemas de recomendación o detección de fraude.
+                </div>
+                <div class="example reveal delay-2">
+                    <strong>o Ejemplo líder:</strong> Neo4j (Neo4j, 2026).
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-btn btn-prev">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+        <div class="nav-btn btn-next">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // Funcionalidad intacta
+        const swiper = new Swiper(".mySwiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            loop: false, // Lineal
+            rewind: false,
+            coverflowEffect: {
+                rotate: 0,
+                stretch: 80,
+                depth: 200,
+                modifier: 1,
+                slideShadows: false,
+            },
+            navigation: {
+                nextEl: ".btn-next",
+                prevEl: ".btn-prev",
+            },
+            keyboard: true,
+            mousewheel: {
+                forceToAxis: true,
+            }
+        });
+    </script>
+</body>
+</html>
