@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark Cyberpunk - Code Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-purple: #483C9A;
+            --neon-magenta: #ff00ff;
+            --neon-cyan: #00f3ff;
+            --bg-dark: #0a0118;
+            --text-gray: #d1d1d1;
+            --code-bg: #13022b;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-dark);
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Fondo con rejilla Cyberpunk */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(72, 60, 154, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(72, 60, 154, 0.1) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+        }
+
+        .slider {
+            display: flex;
+            width: 400vw; /* Cuatro slides ahora */
+            height: 100vh;
+            transition: transform 0.8s cubic-bezier(0.7, 0, 0.3, 1);
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0 8%;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            border-left: 8px solid var(--primary-purple);
+            padding-left: 20px;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+            letter-spacing: 3px;
+        }
+
+        .content {
+            max-width: 850px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--text-gray);
+            background: rgba(72, 60, 154, 0.1);
+            padding: 25px;
+            border-radius: 0 20px 0 20px;
+            border: 1px solid var(--primary-purple);
+            backdrop-filter: blur(5px);
+            box-shadow: -8px 8px 0px var(--primary-purple);
+        }
+
+        /* Bloque de Código */
+        .code-container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            background: var(--code-bg);
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 10px;
+        }
+
+        pre {
+            margin: 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #a9b7c6;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-purple) transparent;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 5px 12px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: var(--neon-cyan);
+            color: black;
+        }
+
+        .copy-btn.copied {
+            border-color: var(--neon-magenta);
+            color: var(--neon-magenta);
+        }
+
+        /* Navegación */
+        .nav-buttons {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        button.nav-dot {
+            background: transparent;
+            border: 2px solid var(--primary-purple);
+            color: white;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: 'Poppins';
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button.nav-dot:hover, button.nav-dot.active {
+            background: var(--primary-purple);
+            box-shadow: 0 0 15px var(--primary-purple);
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            top: 0;
+            animation: scan 6s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        code.inline-code {
+            background: #2a1f5e;
+            color: var(--neon-magenta);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+    <div class="scanline"></div>
+
+    <div class="slider" id="slider">
+        <section class="slide">
+            <h1>DataFrame</h1>
+            <div class="content">
+                Es una colección distribuida de datos organizada en columnas con nombre, similar a una tabla en una base de datos relacional o un DataFrame en pandas (Python) o R. Los DataFrames se pueden construir a partir de una amplia variedad de fuentes, como archivos estructurados (JSON, CSV, Parquet), tablas de Hive o bases de datos externas. Ofrecen un rico conjunto de operaciones (transformaciones y acciones) y pueden ser manipulados usando expresiones de columna o consultas SQL.
+            </div>
+        </section>
+
+        <section class="slide">
+            <h1>Dataset</h1>
+            <div class="content">
+                Es una extensión de la API de DataFrame que proporciona una interfaz orientada a objetos y con seguridad de tipos (type-safe). Esencialmente, es una colección distribuida de objetos JVM (en Scala y Java). Un DataFrame es, de hecho, un Dataset, donde <code class="inline-code">Row</code> es un objeto genérico y no tipado. Los Datasets combinan la seguridad de tipos de los RDDs con las optimizaciones de rendimiento de los DataFrames.
+            </div>
+        </section>
+
+        <section class="slide">
+            <h1>Carga y Manipulación</h1>
+            <div class="content">
+                La forma más común de interactuar con Spark es a través de la <code class="inline-code">SparkSession</code>, que es el punto de entrada para las APIs estructuradas. A continuación, se muestra un ejemplo simple en PySpark (la API de Python para Spark) de cómo cargar un archivo CSV y realizar algunas transformaciones básicas:
+            </div>
+        </section>
+
+        <section class="slide">
+            <h1>PySpark Code</h1>
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre id="pyspark-code">
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, avg
+
+# 1. Crear una SparkSession
+spark = SparkSession.builder \
+    .appName("EjemploSparkSQL") \
+    .getOrCreate()
+
+# 2. Cargar datos desde un archivo CSV
+df_ventas = spark.read \
+    .option("header", "true") \
+    .option("inferSchema", "true") \
+    .csv("ventas.csv")
+
+# 3. Mostrar esquema y filas
+df_ventas.printSchema()
+df_ventas.show(5)
+
+# 4. Transformaciones
+df_filtrado = df_ventas.select("producto","cantidad","precio")
+df_laptops = df_filtrado.filter(col("producto") == "Laptop")
+
+# 5. Agregación
+df_precio_promedio = df_ventas \
+    .groupBy("producto") \
+    .agg(avg("precio").alias("precio_promedio"))
+
+# 6. Usar SQL directamente
+df_ventas.createOrReplaceTempView("vista_ventas")
+df_sql = spark.sql("""
+  SELECT producto, SUM(cantidad * precio) AS total
+  FROM vista_ventas GROUP BY producto
+""")
+
+# 7. Detener sesión
+spark.stop()</pre>
+            </div>
+        </section>
+    </div>
+
+    <div class="nav-buttons">
+        <button class="nav-dot active" onclick="move(0, this)">01</button>
+        <button class="nav-dot" onclick="move(1, this)">02</button>
+        <button class="nav-dot" onclick="move(2, this)">03</button>
+        <button class="nav-dot" onclick="move(3, this)">04</button>
+    </div>
+
+    <script>
+        function move(index, btn) {
+            const slider = document.getElementById('slider');
+            slider.style.transform = `translateX(-${index * 100}vw)`;
+            
+            // Actualizar estado de botones
+            document.querySelectorAll('.nav-dot').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        async function copyCode(button) {
+            const code = document.getElementById('pyspark-code').innerText;
+            try {
+                await navigator.clipboard.writeText(code);
+                button.innerText = "¡Copiado!";
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.innerText = "Copiar";
+                    button.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('Error al copiar: ', err);
+            }
+        }
+    </script>
+</body>
+</html>
