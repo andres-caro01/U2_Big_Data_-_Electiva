@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spark 3D Cards - Imagen Actualizada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #3a86ff;
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #060b16;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            min-height: 100vh;
+            margin: 0;
+            flex-wrap: wrap;
+        }
+
+        /* --- Instrucción --- */
+        .nav-instruction {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        /* --- Flotación --- */
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .card-container {
+            width: 340px;
+            height: 460px;
+            perspective: 1200px;
+            animation: subtleFloat 5s ease-in-out infinite;
+        }
+
+        .card-container:hover, .card-container.is-flipped {
+            animation-play-state: paused;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .card-inner.flipped { transform: rotateY(180deg); }
+
+        /* --- CARA FRONTAL --- */
+        .card-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 1px solid var(--glass-border);
+            background-color: #111; /* Color base por si la imagen tarda en cargar */
+        }
+
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .text-overlay {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 25px;
+            box-sizing: border-box;
+            background: linear-gradient(transparent, rgba(0,0,0,0.85));
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+        }
+
+        .text-overlay h2 {
+            margin: 0;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* --- CARA TRASERA --- */
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: linear-gradient(135deg, #1e3a8a, #080e1a);
+            color: white;
+            transform: rotateY(180deg);
+            border-radius: 24px;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+            border: 1px solid var(--glass-border);
+        }
+
+        .card-back h3 { color: var(--primary-blue); margin-bottom: 10px; }
+        .card-back p { font-size: 0.9rem; line-height: 1.6; opacity: 0.9; margin: 0; }
+        .deco-bar { width: 40px; height: 3px; background: var(--primary-blue); margin-bottom: 15px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-instruction">Haz clic para girar</div>
+
+    <div class="card-container" id="card1">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="bg-image" alt="Spark Streaming Data">
+                <div class="text-overlay">
+                    <h2>Spark Streaming</h2>
+                </div>
+            </div>
+            <div class="card-back">
+                <div class="deco-bar"></div>
+                <h3>Procesamiento en Vivo</h3>
+                <p>Es el componente de Spark para procesar flujos de datos en vivo. La implementación original se basaba en DStreams (Discretized Streams), que procesaban los datos en micro-lotes. La API más moderna, <strong>Structured Streaming</strong>, está construida sobre el motor de Spark SQL.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-container" id="card2">
+        <div class="card-inner">
+            <div class="card-front">
+                <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=600" class="bg-image" alt="AI Network">
+                <div class="text-overlay">
+                    <h2>Spark MLlib</h2>
+                </div>
+            </div>
+            <div class="card-back">
+                <div class="deco-bar"></div>
+                <h3>Machine Learning</h3>
+                <p>Es la biblioteca de aprendizaje automático de Spark. Proporciona implementaciones escalables de algoritmos comunes de clasificación, regresión, clustering y filtrado colaborativo, así como herramientas para la construcción de pipelines de ML masivos.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setupCard(cardId) {
+            const container = document.getElementById(cardId);
+            const inner = container.querySelector('.card-inner');
+            container.addEventListener('click', () => {
+                inner.classList.toggle('flipped');
+                container.classList.toggle('is-flipped');
+            });
+        }
+        setupCard('card1');
+        setupCard('card2');
+    </script>
+</body>
+</html>
