@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelado NoSQL - Tech Left Aligned</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-body: #0f0f17;
+            --bg-card: #181826;
+            --bg-header: #212135;
+            --accent-main: #bd5eff;
+            --accent-glow: #9d26ef;
+            --text-main: #d1d1e0;
+            --text-title: #ffffff;
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1300px;
+        }
+
+        /* --- Tarjeta con Animación --- */
+        .module {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid rgba(189, 94, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-30px); /* Entrada desde la izquierda */
+            animation: slideIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .module:hover {
+            border-color: var(--accent-main);
+            box-shadow: 0 0 20px rgba(189, 94, 255, 0.15);
+            transition: all 0.4s ease;
+        }
+
+        /* --- Delays Secuenciales --- */
+        .module-1 { animation-delay: 0.2s; }
+        .module-2 { animation-delay: 0.6s; }
+        .module-3 { animation-delay: 1.0s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                visibility: visible;
+                transform: translateX(0);
+            }
+        }
+
+        /* --- Cabecera Estilo Tech --- */
+        .module-header {
+            color: var(--accent-main);
+            font-size: 2.5rem;
+            font-weight: 800;
+            padding: 20px 30px;
+            background: linear-gradient(90deg, var(--bg-header) 0%, transparent 100%);
+            border-bottom: 2px solid var(--accent-main);
+            position: relative;
+        }
+
+        .module-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 40%;
+            height: 2px;
+            background: var(--text-title);
+            box-shadow: 0 0 10px var(--accent-main);
+        }
+
+        /* --- Contenido Alineado a la Izquierda --- */
+        .module-content {
+            padding: 30px;
+            text-align: left; /* Alineación solicitada */
+        }
+
+        .module-title {
+            font-weight: 700;
+            color: var(--text-title);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .module-body {
+            font-size: 0.95rem;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--text-main);
+            letter-spacing: 0.3px;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            .presentation-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <div class="module module-1">
+            <div class="module-header">1</div>
+            <div class="module-content">
+                <div class="module-title">Modelado Embebido (Embedding)</div>
+                <div class="module-body">
+                    En las bases de datos documentales, si los datos se acceden juntos, deben almacenarse juntos. En lugar de crear una tabla separada para las direcciones y hacer un JOIN, se anida el objeto de dirección dentro del documento del usuario. Esto reduce la necesidad de múltiples consultas y mejora drásticamente el rendimiento de la lectura.
+                </div>
+            </div>
+        </div>
+
+        <div class="module module-2">
+            <div class="module-header">2</div>
+            <div class="module-content">
+                <div class="module-title">Modelado por Referencia (Referencing)</div>
+                <div class="module-body">
+                    Se utiliza cuando el modelo embebido conduciría a una duplicación excesiva de datos o a documentos demasiados grandes. En lugar de embeber el objeto completo, se almacena solo su ID como una referencia, similar a una clave foránea. Esto requiere una segunda consulta para obtener los datos referenciados, pero mantiene los documentos más pequeños y facilita la actualización de la entidad referenciada.
+                </div>
+            </div>
+        </div>
+
+        <div class="module module-3">
+            <div class="module-header">3</div>
+            <div class="module-content">
+                <div class="module-title">Diseño Orientado a la Consulta (Query-First Design)</div>
+                <div class="module-body">
+                    Especialmente en bases de datos como Cassandra, el modelado comienza por identificar todas las consultas que la aplicación necesitará realizar. Luego, se diseñan tablas específicas para satisfacer cada una de esas consultas, incluso si eso significa duplicar los mismos datos en múltiples tablas con diferentes claves primarias. El objetivo es evitar lecturas lentas y complejas a toda costa.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
