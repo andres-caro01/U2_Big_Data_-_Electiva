@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cassandra Features - Futuristic Vertical Flip Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-purple: #6d28d9;
+            --dark-purple: #1e1b4b;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #f5f3ff;
+            --purple-glow: rgba(167, 139, 250, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #2e1065, #020617);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 90px;
+            /* Espacio para la instrucción flotante */
+        }
+
+        /* Contenedor Grid: 2x2 en Desktop, 1x4 en Mobile */
+        .grid-container {
+            display: grid;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1000px;
+            grid-template-columns: repeat(1, 1fr);
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Estructura Flip Card */
+        .flip-card {
+            background-color: transparent;
+            height: 380px;
+            /* Un poco más de altura para el contenido de Cassandra */
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+
+        /* MODIFICACIÓN: Giro VERTICAL (rotateX) activado por clic */
+        .flip-card.is-flipped .flip-card-inner {
+            transform: rotateX(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+            /* Aumentado sutilmente */
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            box-sizing: border-box;
+        }
+
+        /* Estilo Frontal: Glassmorphism con resplandor */
+        .flip-card-front {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .flip-card-front i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #a78bfa;
+            text-shadow: 0 0 15px var(--purple-glow);
+        }
+
+        .flip-card-front h3 {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin: 0;
+            font-size: 1.3rem;
+            line-height: 1.2;
+        }
+
+        /* Estilo Trasero: Gradiente Morado Profundo */
+        .flip-card-back {
+            background: linear-gradient(135deg, var(--primary-purple), var(--dark-purple));
+            color: white;
+            /* MODIFICACIÓN: Rotación vertical inicial */
+            transform: rotateX(180deg);
+            overflow-y: auto;
+            /* Para texto largo */
+        }
+
+        .flip-card-back p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            text-align: left;
+            font-weight: 300;
+            margin: 0;
+        }
+
+        .flip-card-back p strong {
+            font-weight: 600;
+            color: #d8b4fe;
+        }
+
+        /* Scrollbar personalizado del reverso */
+        .flip-card-back::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .flip-card-back::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+        }
+
+        /* Instrucción Flotante Sutil */
+        .floating-instruction {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(109, 40, 217, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f5f3ff;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            animation: pulse 2.5s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            white-space: nowrap;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.7;
+                transform: translateX(-50%) scale(0.98);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+
+            100% {
+                opacity: 0.7;
+                transform: translateX(-50%) scale(0.98);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="grid-container">
+
+        <div class="flip-card" onclick="this.classList.toggle('is-flipped')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <i class="fas fa-network-wired"></i>
+                    <h3>Arquitectura Peer-to-Peer</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Todos los nodos son iguales y se comunican entre sí, eliminando el concepto de nodo maestro. Esto
+                        asegura que no haya un único punto de fallo (Single Point of Failure), mejorando la
+                        confiabilidad del clúster.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('is-flipped')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <i class="fas fa-clone"></i>
+                    <h3>Replicación Integrada</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Cassandra está diseñada para la alta disponibilidad. Los datos se replican automáticamente a
+                        través de múltiples nodos y centros de datos. Puedes definir un <strong>Factor de
+                            Replicación</strong> para asegurar que si un nodo falla, los datos sigan accesibles.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('is-flipped')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <i class="fas fa-arrow-up-right-dots"></i>
+                    <h3>Escalabilidad Lineal</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Añadir nuevos nodos al clúster aumenta el rendimiento y la capacidad de almacenamiento de forma
+                        predecible y proporcional. Puedes manejar cargas de trabajo masivas simplemente sumando hardware
+                        básico al clúster.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('is-flipped')">
+            <div class="flip-card-inner">
+                <div class="flip-card-front">
+                    <i class="fas fa-sliders-h"></i>
+                    <h3>Consistencia Ajustable</h3>
+                </div>
+                <div class="flip-card-back">
+                    <p>Cassandra te permite ajustar el nivel de consistencia para cada operación de lectura y escritura.
+                        Esto ofrece una gran flexibilidad para equilibrar la consistencia de los datos con el
+                        rendimiento, según los requisitos de tu aplicación.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="floating-instruction">
+        <i class="fas fa-mouse-pointer"></i>
+        Haga clic sobre las tarjetas para ampliar la información
+    </div>
+
+</body>
+
+</html>
