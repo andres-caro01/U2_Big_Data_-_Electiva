@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliografía - Big Data & NoSQL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- PALETA DE COLORES MORADOS --- */
+            --accent-color: #4a148c; /* Morado profundo */
+            --accent-bright: #e040fb; /* Magenta/Fucsia brillante */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(224, 64, 251, 0.2);
+            --text-main: #ffffff;
+            --text-dim: #b39ddb;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0118; /* Fondo casi negro con tinte morado */
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* --- FONDO ANIMADO FLUIDO MORADO --- */
+        .fluid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #0d0221;
+            filter: blur(80px);
+        }
+
+        .fluid-layer {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.4;
+            mix-blend-mode: screen;
+            animation: fluidMove infinite alternate ease-in-out;
+        }
+
+        .layer-1 { background: radial-gradient(circle, #6a1b9a 0%, transparent 70%); width: 100vw; height: 100vw; top: -30%; left: -10%; animation-duration: 20s; }
+        .layer-2 { background: radial-gradient(circle, #311b92 0%, transparent 70%); width: 80vw; height: 80vw; bottom: -20%; right: -10%; animation-duration: 25s; }
+        .layer-3 { background: radial-gradient(circle, var(--accent-bright) 0%, transparent 60%); width: 60vw; height: 60vw; top: 20%; right: 10%; animation-duration: 15s; opacity: 0.2; }
+
+        @keyframes fluidMove {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+            100% { transform: translate(15%, 5%) scale(1.1) rotate(45deg); }
+        }
+
+        /* --- TÍTULO --- */
+        .main-header {
+            text-align: center;
+            padding: 60px 20px 40px 20px;
+            z-index: 1;
+            animation: fadeInDown 1s ease;
+        }
+
+        .main-header h1 {
+            font-weight: 300;
+            font-size: clamp(2rem, 5vw, 3rem);
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            margin: 0;
+            background: linear-gradient(to right, #fff, var(--accent-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .main-header .line {
+            width: 80px;
+            height: 3px;
+            background: var(--accent-bright);
+            margin: 20px auto;
+            box-shadow: 0 0 15px var(--accent-bright);
+        }
+
+        /* REJILLA */
+        .reference-grid {
+            display: grid;
+            width: 90vw;
+            max-width: 1400px;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 20px;
+            padding-bottom: 80px;
+            z-index: 1;
+        }
+
+        /* TARJETAS */
+        .card {
+            text-decoration: none;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 180px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Efecto solo para las que tienen enlace */
+        a.card:hover {
+            transform: scale(1.03) translateY(-5px);
+            background: rgba(224, 64, 251, 0.05);
+            border-color: var(--accent-bright);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4), 0 0 20px rgba(224, 64, 251, 0.2);
+        }
+
+        .author-tag {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--accent-bright);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .title {
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--text-main);
+            font-weight: 400;
+        }
+
+        .footer-info {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 15px;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        a.card .footer-info::after {
+            content: 'DOCS →';
+            font-weight: 700;
+            font-size: 0.65rem;
+            letter-spacing: 1px;
+            color: var(--accent-bright);
+        }
+
+        /* ANIMACIONES */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Retraso escalonado dinámico */
+        .card:nth-child(n) { animation-delay: calc(0.05s * var(--i)); }
+
+    </style>
+</head>
+<body>
+
+    <div class="fluid-background">
+        <div class="fluid-layer layer-1"></div>
+        <div class="fluid-layer layer-2"></div>
+        <div class="fluid-layer layer-3"></div>
+    </div>
+
+    <header class="main-header">
+        <h1>Bibliografía</h1>
+        <div class="line"></div>
+    </header>
+
+    <main class="reference-grid">
+        <a href="https://docs.aws.amazon.com/es_es/amazondynamodb/latest/developerguide/Introduction.html" target="_blank" class="card" style="--i:1">
+            <div class="author-tag">Amazon Web Services (s.f.)</div>
+            <div class="title">¿Qué es Amazon DynamoDB?</div>
+            <div class="footer-info">Developer Guide</div>
+        </a>
+
+        <a href="https://aws.amazon.com/es/elasticache/what-is-redis/" target="_blank" class="card" style="--i:2">
+            <div class="author-tag">Amazon Web Services (s.f.)</div>
+            <div class="title">¿Qué es Redis?</div>
+            <div class="footer-info">ElastiCache Portal</div>
+        </a>
+
+        <a href="https://hadoop.apache.org/docs/stable/" target="_blank" class="card" style="--i:3">
+            <div class="author-tag">Apache Software Foundation (2025)</div>
+            <div class="title">Apache Hadoop 3.4.2 Documentation</div>
+            <div class="footer-info">Stable Release</div>
+        </a>
+
+        <div class="card" style="--i:4">
+            <div class="author-tag">Apache Software Foundation (2026)</div>
+            <div class="title">Apache Cassandra</div>
+            <div class="footer-info">Foundation Docs</div>
+        </div>
+
+        <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html" target="_blank" class="card" style="--i:5">
+            <div class="author-tag">Apache Software Foundation (2026)</div>
+            <div class="title">Guía de Spark SQL, DataFrames y datasets</div>
+            <div class="footer-info">Programming Guide</div>
+        </a>
+
+        <a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html" target="_blank" class="card" style="--i:6">
+            <div class="author-tag">Apache Software Foundation (2026)</div>
+            <div class="title">Spark Streaming Programming Guide (v4.1.0)</div>
+            <div class="footer-info">Spark Docs</div>
+        </a>
+
+        <a href="https://hadoop.apache.org/docs/stable/hadoop-yarn/hadoop-yarn-site/YARN.html" target="_blank" class="card" style="--i:7">
+            <div class="author-tag">Apache Software Foundation (s.f.)</div>
+            <div class="title">Apache Hadoop YARN Architecture</div>
+            <div class="footer-info">YARN Site</div>
+        </a>
+
+        <a href="https://www.datacamp.com/es/blog/apache-spark-architecture" target="_blank" class="card" style="--i:8">
+            <div class="author-tag">Brus, P. (2025)</div>
+            <div class="title">Arquitectura de Apache Spark: Guía para profesionales</div>
+            <div class="footer-info">DataCamp Blog</div>
+        </a>
+
+        <a href="https://www.oreilly.com/library/view/cassandra-la-guia/9781098187477/ch05.html" target="_blank" class="card" style="--i:9">
+            <div class="author-tag">Carpenter & Hewitt (2024)</div>
+            <div class="title">Cassandra: la guía definitiva</div>
+            <div class="footer-info">O'Reilly Media</div>
+        </a>
+
+        <div class="card" style="--i:10">
+            <div class="author-tag">Chambers & Zaharia (2018)</div>
+            <div class="title">Spark: The Definitive Guide</div>
+            <div class="footer-info">O'Reilly Media</div>
+        </div>
+
+        <a href="https://www.oreilly.com/library/view/learning-spark-2nd/9781492050032/" target="_blank" class="card" style="--i:11">
+            <div class="author-tag">Damji, J. S. & otros (2020)</div>
+            <div class="title">Learning Spark: Lightning-fast data analytics</div>
+            <div class="footer-info">O'Reilly (2nd Ed)</div>
+        </a>
+
+        <a href="https://www.oracle.com/latam/database/mongodb/" target="_blank" class="card" style="--i:12">
+            <div class="author-tag">Erickson, J. (2024)</div>
+            <div class="title">¿Qué es MongoDB? Guía avanzada</div>
+            <div class="footer-info">Oracle Latam</div>
+        </a>
+
+        <a href="https://www.ibm.com/think/topics/resilient-distributed-dataset" target="_blank" class="card" style="--i:13">
+            <div class="author-tag">Holdsworth & Kosinski (s.f.)</div>
+            <div class="title">What Is a Resilient Distributed Dataset (RDD)?</div>
+            <div class="footer-info">IBM Think</div>
+        </a>
+
+        <a href="https://www.ibm.com/es-es/think/topics/mapreduce" target="_blank" class="card" style="--i:14">
+            <div class="author-tag">IBM (2026)</div>
+            <div class="title">¿Qué es MapReduce? Conceptos y bases</div>
+            <div class="footer-info">IBM Think España</div>
+        </a>
+
+        <a href="https://www.mongodb.com/es/solutions/use-cases" target="_blank" class="card" style="--i:15">
+            <div class="author-tag">MongoDB (2026)</div>
+            <div class="title">Casos de uso de bases de datos NoSQL</div>
+            <div class="footer-info">MongoDB Solutions</div>
+        </a>
+
+        <a href="https://www.mongodb.com/docs/manual/data-modeling/" target="_blank" class="card" style="--i:16">
+            <div class="author-tag">MongoDB (2026)</div>
+            <div class="title">Data Modeling in MongoDB</div>
+            <div class="footer-info">Official Manual</div>
+        </a>
+
+        <a href="https://www.mongodb.com/resources/products/capabilities/features" target="_blank" class="card" style="--i:17">
+            <div class="author-tag">MongoDB (2026)</div>
+            <div class="title">MongoDB Features & Key Characteristics</div>
+            <div class="footer-info">Product Resources</div>
+        </a>
+
+        <a href="https://neo4j.com/docs/" target="_blank" class="card" style="--i:18">
+            <div class="author-tag">Neo4j (2026)</div>
+            <div class="title">Neo4j Graph Database Documentation</div>
+            <div class="footer-info">Neo4j Docs</div>
+        </a>
+
+        <a href="https://kinsta.com/es/blog/crear-base-de-datos-mongodb/" target="_blank" class="card" style="--i:19">
+            <div class="author-tag">Ravof, S. (2025)</div>
+            <div class="title">Cómo crear una Base de Datos MongoDB: 6 Aspectos</div>
+            <div class="footer-info">Kinsta Blog</div>
+        </a>
+
+        <div class="card" style="--i:20">
+            <div class="author-tag">Saladage & Fowler (2012)</div>
+            <div class="title">NoSQL Distilled: Polyglot Persistence Guide</div>
+            <div class="footer-info">O'Reilly Book</div>
+        </div>
+    </main>
+
+</body>
+</html>
