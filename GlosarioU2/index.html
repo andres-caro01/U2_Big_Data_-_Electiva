@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glosario de la unidad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES DE COLOR ACTUALIZADAS --- */
+        :root {
+            --primary-brand: #483C9A;
+            --bg-light: #ececec;
+            --text-dark: #333333;
+            --white: #ffffff;
+            --disabled-gray: #a0a0a0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: radial-gradient(#d0d0d0 1px, transparent 1px);
+            background-size: 10px 10px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .glossary-widget {
+            width: 100%;
+            max-width: 900px;
+            background: transparent;
+            position: relative; 
+        }
+
+        .instruction-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .instruction-badge {
+            background-color: var(--primary-brand);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse-attention 2s infinite;
+            cursor: default;
+        }
+
+        @keyframes pulse-attention {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(72, 60, 154, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(72, 60, 154, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(72, 60, 154, 0); }
+        }
+
+        .glossary-header {
+            background-color: var(--primary-brand);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .glossary-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .glossary-body {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start; 
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-direction: column;
+            width: 140px;
+            flex-shrink: 0;
+            background-color: var(--primary-brand);
+            border-radius: 15px;
+            padding: 10px 0;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px; 
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--white);
+            border: none;
+            padding: 15px 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            outline: none;
+        }
+
+        .tab-btn:hover:not(.disabled) {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .tab-btn.active {
+            background-color: var(--bg-light);
+            color: var(--primary-brand);
+            border-radius: 5px 0 0 5px;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            background-color: var(--bg-light);
+            border-radius: 15px;
+            padding: 40px;
+            min-height: 450px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .definition-item {
+            margin-bottom: 30px;
+            padding-left: 20px;
+            border-left: 5px solid var(--primary-brand);
+        }
+
+        .definition-item h3 {
+            color: var(--primary-brand);
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .definition-item p {
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin: 0;
+            text-align: justify;
+        }
+
+        .hidden { display: none; }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in .definition-item {
+            animation: slideUpFade 0.5s ease-out forwards;
+            opacity: 0; 
+        }
+
+        .animate-in .definition-item:nth-child(1) { animation-delay: 0.1s; }
+        .animate-in .definition-item:nth-child(2) { animation-delay: 0.2s; }
+        .animate-in .definition-item:nth-child(3) { animation-delay: 0.3s; }
+        .animate-in .definition-item:nth-child(4) { animation-delay: 0.4s; }
+        .animate-in .definition-item:nth-child(5) { animation-delay: 0.5s; }
+        .animate-in .definition-item:nth-child(6) { animation-delay: 0.6s; }
+
+        @media (max-width: 768px) {
+            .glossary-body { flex-direction: column; }
+            .tabs-container { width: 100%; flex-direction: row; position: static; }
+            .tab-btn { flex: 1; border-bottom: none; border-right: 1px solid rgba(255,255,255,0.1); font-size: 0.9rem; }
+            .tab-btn.active { border-radius: 10px 10px 0 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="glossary-widget">
+    <div class="instruction-wrapper">
+        <div class="instruction-badge">
+            <span>👆</span> Haga Clic en los botones para ampliar la información
+        </div>
+    </div>
+
+    <div class="glossary-header">
+        <h1>Glosario de la unidad</h1>
+    </div>
+
+    <div class="glossary-body">
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="filterContent('A-I', this)">A – I</button>
+            <button class="tab-btn" onclick="filterContent('J-Q', this)">J – Q</button>
+            <button class="tab-btn" onclick="filterContent('R-Z', this)">R – Z</button>
+        </div>
+
+        <div class="content-area">
+            <div class="content-group animate-in" id="group-A-I">
+                <div class="definition-item">
+                    <h3>Apache Cassandra</h3>
+                    <p>Base de datos NoSQL distribuida, de código abierto y orientada a columnas anchas, diseñada para manejar grandes cantidades de datos a través de múltiples servidores, proporcionando alta disponibilidad sin un único punto de fallo.</p>
+                </div>
+                <div class="definition-item">
+                    <h3>Apache Spark</h3>
+                    <p>Un motor de análisis unificado y de código abierto para el procesamiento de datos a gran escala. Ofrece APIs de alto nivel en Java, Scala, Python y R, y un motor optimizado que soporta grafos de ejecución generales.</p>
+                </div>
+                <div class="definition-item">
+                    <h3>Clúster Manager (Gestor de Clúster)</h3>
+                    <p>En el contexto de Spark, es el responsable de adquirir y gestionar los recursos computacionales (CPU, memoria) en el clúster. Ejemplos comunes son YARN, Mesos y el gestor Standalone de Spark.</p>
+                </div>
+                <div class="definition-item">
+                    <h3>DataFrame</h3>
+                    <p>Una colección distribuida de datos organizada en columnas con nombre. Es conceptualmente equivalente a una tabla en una base de datos relacional o una data frame en R/Python, pero con optimizaciones enriquecidas para el procesamiento distribuido. Es la principal API estructurada en Spark.</p>
+                </div>
+                <div class="definition-item">
+                    <h3>Driver (Controlador)</h3>
+                    <p>El proceso principal en una aplicación Spark que ejecuta la función main() del programa, crea el SparkContext, y coordina la ejecución de las tareas en los ejecutores.</p>
+                </div>
+                <div class="definition-item">
+                    <h3>Executor (Ejecutor)</h3>
+                    <p>Un proceso lanzado para una aplicación en un nodo trabajador (worker node) del clúster de Spark. Es responsable de ejecutar las tareas asignadas por el driver y de almacenar datos en memoria o disco.</p>
+                </div>
+            </div>
+
+            <div class="content-group hidden" id="group-J-Q">
+                <div class="definition-item">
+                    <h3>MapReduce</h3>
+                    <p>Un paradigma de programación que procesa y genera grandes conjuntos de datos utilizando un algoritmo en paralelo y distribuido en un clúster. Consta de dos fases principales: Map (mapeo) y Reduce (reducción).</p>
+                </div>
+                <div class="definition-item">
+                    <h3>MongoDB</h3>
+                    <p>Una base de datos NoSQL orientada a documentos, de código abierto y multiplataforma. Utiliza documentos similares a JSON con esquemas flexibles para almacenar datos, lo que facilita el desarrollo y la escalabilidad.</p>
+                </div>
+                <div class="definition-item">
+                    <h3>Neo4j</h3>
+                    <p>Es un SGBD especializado en Bases de datos de grafos, encargado de almacenar los datos haciendo uso de nodos y relaciones entre los nodos. Es una herramienta considerada líder en el mercado en este tipo de bases de datos. Cuando se trata de datos complejos e interconectados esta herramienta es altamente eficiente para realizar consultas.</p>
+                </div>
+            </div>
+
+            <div class="content-group hidden" id="group-R-Z">
+                <div class="definition-item">
+                    <h3>Resilient Distributed Dataset (RDD)</h3>
+                    <p>Herramienta original y fundamental de Spark para la abstracción de datos. Consiste en un conjunto de elementos inmutables y tolerante a fallos a ser operados, a través de los nodos de un clúster, en paralelo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function filterContent(groupId, btnElement) {
+        const groups = document.querySelectorAll('.content-group');
+        groups.forEach(group => {
+            group.classList.add('hidden');
+            group.classList.remove('animate-in');
+        });
+
+        const selectedGroup = document.getElementById('group-' + groupId);
+        if (selectedGroup) {
+            selectedGroup.classList.remove('hidden');
+            void selectedGroup.offsetWidth; 
+            selectedGroup.classList.add('animate-in');
+        }
+
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        btnElement.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
