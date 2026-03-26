@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limitaciones de MapReduce - Tech Interface</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-purple: #9d4edd;
+            --dark-bg: #0a0118;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --neon-border: rgba(157, 78, 221, 0.5);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(157, 78, 221, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(60, 9, 108, 0.2) 0%, transparent 40%);
+            color: #e0e1dd;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Contenedor Principal */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Sidebar con botones */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--neon-border);
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: #fff;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateX(-50px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--primary-purple);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-btn:hover {
+            transform: translateX(10px);
+            background: rgba(157, 78, 221, 0.15);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+        }
+
+        .nav-btn.active {
+            background: rgba(157, 78, 221, 0.25);
+            border-color: #c77dff;
+            transform: translateX(15px);
+        }
+
+        .nav-btn.active::before {
+            transform: scaleY(1);
+        }
+
+        /* Animación de entrada para botones */
+        .sidebar .nav-btn:nth-child(1) {
+            animation: slideIn 0.5s forwards 0.1s;
+        }
+
+        .sidebar .nav-btn:nth-child(2) {
+            animation: slideIn 0.5s forwards 0.2s;
+        }
+
+        .sidebar .nav-btn:nth-child(3) {
+            animation: slideIn 0.5s forwards 0.3s;
+        }
+
+        .sidebar .nav-btn:nth-child(4) {
+            animation: slideIn 0.5s forwards 0.4s;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Área de Contenido */
+        .content-area {
+            background: var(--glass-bg);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-card {
+            display: none;
+            max-width: 700px;
+            animation: fadeInBlur 0.6s ease-out forwards;
+        }
+
+        .content-card.active {
+            display: block;
+        }
+
+        @keyframes fadeInBlur {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+                filter: blur(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .tech-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #5a189a;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff, #c77dff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        p {
+            line-height: 1.8;
+            font-size: 1.1rem;
+            color: #b0a6c0;
+        }
+
+        /* Decoración */
+        .bg-ornament {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border: 2px solid var(--primary-purple);
+            border-radius: 50%;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <button class="nav-btn active" onclick="showTab(0)">01. Alto Costo I/O</button>
+            <button class="nav-btn" onclick="showTab(1)">02. Algoritmos Iterativos</button>
+            <button class="nav-btn" onclick="showTab(2)">03. Análisis Interactivo</button>
+            <button class="nav-btn" onclick="showTab(3)">04. API y Verbosidad</button>
+        </aside>
+
+        <main class="content-area">
+            <div class="bg-ornament"></div>
+
+            <div id="card-0" class="content-card active">
+                <span class="tech-tag">Performance Critical</span>
+                <h2>Alto Costo de I/O en Disco</h2>
+                <p>MapReduce depende en gran medida del disco. Escribe los resultados intermedios de la fase Map en el
+                    disco local de los nodos antes de que la fase Reduce pueda comenzar a leerlos. Este constante I/O de
+                    disco se convierte en un cuello de botella de rendimiento masivo.</p>
+            </div>
+
+            <div id="card-1" class="content-card">
+                <span class="tech-tag">Algorithm Logic</span>
+                <h2>Ineficiencia para Algoritmos Iterativos</h2>
+                <p>Muchos algoritmos de machine learning y grafos son iterativos, lo que significa que realizan
+                    múltiples pasadas sobre los mismos datos. En MapReduce, cada iteración requiere un trabajo completo,
+                    implicando leer y escribir en disco una y otra vez de forma ineficiente.</p>
+            </div>
+
+            <div id="card-2" class="content-card">
+                <span class="tech-tag">User Experience</span>
+                <h2>No es Adecuado para Análisis Interactivo</h2>
+                <p>La alta latencia de los trabajos MapReduce, que a menudo tardan minutos u horas en completarse, los
+                    hace inviables para la exploración de datos interactiva o las consultas en tiempo real que requieren
+                    respuestas inmediatas.</p>
+            </div>
+
+            <div id="card-3" class="content-card">
+                <span class="tech-tag">Developer Experience</span>
+                <h2>API de Bajo Nivel y Verbosidad</h2>
+                <p>Escribir trabajos MapReduce en Java es un proceso complejo y verboso. Requiere una cantidad
+                    significativa de código repetitivo (boilerplate code), lo que dificulta el mantenimiento y ralentiza
+                    el ciclo de desarrollo.</p>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function showTab(index) {
+            // Actualizar botones
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons[index].classList.add('active');
+
+            // Actualizar contenido
+            const cards = document.querySelectorAll('.content-card');
+            cards.forEach(card => card.classList.remove('active'));
+
+            // Un pequeño delay para reiniciar la animación
+            setTimeout(() => {
+                cards[index].classList.add('active');
+            }, 10);
+        }
+    </script>
+</body>
+
+</html>
